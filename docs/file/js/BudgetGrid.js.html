@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">js/BudgetGrid.js | API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://gitlab.com/lcsfwd/default-boilerplate.git">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  </ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">js/BudgetGrid.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/* eslint-disable require-jsdoc */
+let grid;
+const maxRecords = 300;
+
+function CustomPinnedRowRenderer() {}
+
+CustomPinnedRowRenderer.prototype.init = function (params) {
+	this.eGui = document.createElement(&apos;div&apos;);
+	if (params.class) {
+		this.eGui.className += &apos; &apos; + params.class;
+	}
+	this.eGui.innerHTML = params.value;
+};
+
+CustomPinnedRowRenderer.prototype.getGui = function () {
+	return this.eGui;
+};
+
+const columnDefs = [
+	{
+		headerName: &apos;Producer group&apos;,
+		field: &apos;producerGroup&apos;,
+		hide: true,
+		rowGroup: true
+	},
+	{
+		headerName: &apos;Producer&apos;,
+		field: &apos;producer&apos;,
+		hide: true,
+		rowGroup: true
+	},
+	{
+		headerName: &apos;Dpt.&apos;,
+		field: &apos;department&apos;
+	},
+	{
+		headerName: &apos;SA&apos;,
+		field: &apos;sa&apos;
+	},
+	{
+		headerName: &apos;BL&apos;,
+		field: &apos;bl&apos;
+	},
+	{
+		headerName: &apos;Jan.&apos;,
+		field: &apos;january&apos;,
+		aggFunc: &apos;sum&apos;
+	},
+	{
+		headerName: &apos;Feb.&apos;,
+		field: &apos;february&apos;,
+		aggFunc: &apos;sum&apos;
+	},
+	{
+		headerName: &apos;Mar.&apos;,
+		field: &apos;march&apos;,
+		aggFunc: &apos;sum&apos;
+	},
+	{
+		headerName: &apos;Apr.&apos;,
+		field: &apos;april&apos;,
+		aggFunc: &apos;sum&apos;
+	},
+	{
+		headerName: &apos;May&apos;,
+		field: &apos;may&apos;,
+		aggFunc: &apos;sum&apos;
+	},
+	{
+		headerName: &apos;Jun.&apos;,
+		field: &apos;june&apos;,
+		aggFunc: &apos;sum&apos;
+	},
+	{
+		headerName: &apos;Jul.&apos;,
+		field: &apos;july&apos;,
+		aggFunc: &apos;sum&apos;
+	},
+	{
+		headerName: &apos;Aug.&apos;,
+		field: &apos;august&apos;,
+		aggFunc: &apos;sum&apos;
+	},
+	{
+		headerName: &apos;Sept.&apos;,
+		field: &apos;september&apos;,
+		aggFunc: &apos;sum&apos;
+	},
+	{
+		headerName: &apos;Oct.&apos;,
+		field: &apos;october&apos;,
+		aggFunc: &apos;sum&apos;
+	},
+	{
+		headerName: &apos;Nov.&apos;,
+		field: &apos;november&apos;,
+		aggFunc: &apos;sum&apos;
+	},
+	{
+		headerName: &apos;Dec.&apos;,
+		field: &apos;december&apos;,
+		aggFunc: &apos;sum&apos;
+	},
+	{
+		headerName: &apos;Total 2021&apos;,
+		valueGetter: params =&gt; {
+			console.log(params);
+			return (
+				params.data.january +
+				params.data.february +
+				params.data.march +
+				params.data.april +
+				params.data.may +
+				params.data.june +
+				params.data.july +
+				params.data.august +
+				params.data.september +
+				params.data.october +
+				params.data.november +
+				params.data.december
+			);
+		},
+		pinned: &apos;right&apos;,
+		aggFunc: &apos;sum&apos;,
+		cellRendererSelector: function (params) {
+			if (params.node.rowPinned) {
+				return {
+					component: CustomPinnedRowRenderer,
+					params: {
+						class: &apos;merda&apos;
+					}
+				};
+			} else {
+				return undefined;
+			}
+		}
+	},
+	{
+		headerName: &apos;Budget 2021&apos;,
+		field: &apos;budget&apos;,
+		pinned: &apos;right&apos;,
+		aggFunc: &apos;sum&apos;
+	},
+	{
+		headerName: &apos;Ecart 2021&apos;,
+		valueGetter: params =&gt; {
+			return (
+				params.data.january +
+				params.data.february +
+				params.data.march +
+				params.data.april +
+				params.data.may +
+				params.data.june +
+				params.data.july +
+				params.data.august +
+				params.data.september +
+				params.data.october +
+				params.data.november +
+				params.data.december -
+				params.data.budget
+			);
+		},
+		valueFormatter: params =&gt; {
+			if (!isNaN(params.value)) {
+				return params.value &gt; 0 ? &apos;+&apos; + params.value : params.value;
+			} else {
+				return &apos;&apos;;
+			}
+		},
+		pinned: &apos;right&apos;,
+		aggFunc: &apos;sum&apos;
+	}
+];
+
+function randomIntFromInterval(min, max) {
+	return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+const defaultColumnDef = {
+	filter: true,
+	sortable: true,
+	resizable: true,
+	suppressMenu: true
+};
+
+const rowData = [];
+
+let group = 1;
+let prod = 1;
+let groupIdent;
+let prodIdent;
+let jan;
+let feb;
+let mar;
+let apr;
+let may;
+let jun;
+let jul;
+let aug;
+let sept;
+let oct;
+let nov;
+let dec;
+let dep = randomIntFromInterval(15, 150);
+let sa;
+let bl;
+let budget;
+for (let i = 1; i &lt; maxRecords + 1; i++) {
+	groupIdent = randomIntFromInterval(9, 18);
+	prodIdent = randomIntFromInterval(3, 9);
+	jan = randomIntFromInterval(15, 150);
+	feb = randomIntFromInterval(15, 150);
+	mar = randomIntFromInterval(15, 150);
+	apr = randomIntFromInterval(15, 150);
+	may = randomIntFromInterval(15, 150);
+	jun = randomIntFromInterval(15, 150);
+	jul = randomIntFromInterval(15, 150);
+	aug = randomIntFromInterval(15, 150);
+	sept = randomIntFromInterval(15, 150);
+	oct = randomIntFromInterval(15, 150);
+	nov = randomIntFromInterval(15, 150);
+	dec = randomIntFromInterval(15, 150);
+	budget = randomIntFromInterval(15, 150) * 12;
+	dep = i % prodIdent == 0 ? randomIntFromInterval(15, 150) : dep;
+	sa = randomIntFromInterval(15, 150);
+	bl = randomIntFromInterval(15, 150);
+	group = i % groupIdent == 0 ? group + 1 : group;
+	prod = i % prodIdent == 0 ? prod + 1 : prod;
+	rowData.push({
+		producerGroup: &apos;Group &apos; + group,
+		producer: &apos;producer &apos; + prod,
+		wasteFamily: &apos;waste family &apos; + i,
+		january: jan,
+		february: feb,
+		march: mar,
+		april: apr,
+		may: may,
+		june: jun,
+		july: jul,
+		august: aug,
+		september: sept,
+		october: oct,
+		november: nov,
+		december: dec,
+		budget: budget,
+		department: &apos;DEP&apos; + dep,
+		sa: &apos;SA&apos; + sa,
+		bl: &apos;BL&apos; + bl
+	});
+}
+
+const gridOptions = {
+	columnDefs: columnDefs,
+	defaultColDef: defaultColumnDef,
+	rowData: rowData,
+	// domLayout: &apos;autoHeight&apos;,
+	rowSelection: &apos;multiple&apos;,
+	headerHeight: 46,
+	rowHeight: 64,
+	suppressRowClickSelection: true,
+	onCellValueChanged: function (event) {
+		console.log(event);
+	},
+	sideBar: {
+		toolPanels: [
+			{
+				id: &apos;filters&apos;,
+				labelDefault: &apos;Filters&apos;,
+				labelKey: &apos;filters&apos;,
+				iconKey: &apos;filter&apos;,
+				toolPanel: &apos;agFiltersToolPanel&apos;
+			},
+			{
+				id: &apos;columns&apos;,
+				labelDefault: &apos;Columns&apos;,
+				labelKey: &apos;columns&apos;,
+				iconKey: &apos;columns&apos;,
+				toolPanel: &apos;agColumnsToolPanel&apos;
+			}
+		],
+		defaultToolPanel: undefined
+	},
+	autoGroupColumnDef: {
+		field: &apos;wasteFamily&apos;,
+		cellRendererParams: {
+			suppressCount: true
+		},
+		pinned: &apos;left&apos;,
+		minWidth: 300
+	},
+	enableRangeSelection: true,
+	statusBar: {
+		statusPanels: [
+			{
+				statusPanel: &apos;agTotalAndFilteredRowCountComponent&apos;,
+				key: &apos;totalAndFilter&apos;,
+				align: &apos;left&apos;
+			},
+			{ statusPanel: &apos;agSelectedRowCountComponent&apos;, align: &apos;left&apos; },
+			{ statusPanel: &apos;agAggregationComponent&apos;, align: &apos;right&apos; }
+		]
+	},
+	pinnedTopRowData: [
+		{
+			producerGroup: &apos;Nombre de jours ouvr&#xE9;s&apos;,
+			wasteFamily: &apos;Nombre de jours ouvr&#xE9;s&apos;,
+			january: 22,
+			february: 22,
+			march: 21,
+			april: 21,
+			may: 22,
+			june: 22,
+			july: 20,
+			august: 21,
+			september: 21,
+			october: 21,
+			november: 22,
+			december: 22
+		}
+	]
+};
+
+function autoSizeAll(grid, skipHeader) {
+	var allColumnIds = [];
+	grid.gridOptions.columnApi.getAllColumns().forEach(function (column) {
+		allColumnIds.push(column.colId);
+	});
+
+	grid.gridOptions.columnApi.autoSizeColumns(allColumnIds, skipHeader);
+}
+
+document.addEventListener(&apos;DOMContentLoaded&apos;, () =&gt; {
+	const gridDiv = document.querySelector(&apos;#myGrid&apos;);
+	grid = new agGrid.Grid(gridDiv, gridOptions);
+	autoSizeAll(grid, true);
+	// gridOptions.api.sizeColumnsToFit();
+	window.grid = grid;
+});
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.5.2)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
