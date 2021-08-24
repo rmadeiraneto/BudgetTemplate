@@ -143,7 +143,6 @@ const columnDefs = [
 	{
 		headerName: &apos;Total 2021&apos;,
 		valueGetter: params =&gt; {
-			console.log(params);
 			return (
 				params.data.january +
 				params.data.february +
@@ -368,12 +367,37 @@ function autoSizeAll(grid, skipHeader) {
 	grid.gridOptions.columnApi.autoSizeColumns(allColumnIds, skipHeader);
 }
 
+function toggleTotalsVisibility(grid) {
+	let isToHide = true;
+	const currentState = grid.gridOptions.columnApi.getColumnState();
+	const nextState = currentState.map((column, index) =&gt; {
+		if (index &gt; 17) {
+			column.hide = !column.hide;
+			isToHide = column.hide;
+		}
+		return column;
+	});
+	console.log(currentState);
+	grid.gridOptions.columnApi.applyColumnState({
+		state: nextState
+	});
+	if (isToHide) {
+		grid.gridOptions.api.sizeColumnsToFit();
+	} else {
+		autoSizeAll(grid, true);
+	}
+}
+
 document.addEventListener(&apos;DOMContentLoaded&apos;, () =&gt; {
 	const gridDiv = document.querySelector(&apos;#myGrid&apos;);
 	grid = new agGrid.Grid(gridDiv, gridOptions);
 	autoSizeAll(grid, true);
 	// gridOptions.api.sizeColumnsToFit();
 	window.grid = grid;
+	document.getElementById(&apos;btn&apos;).addEventListener(&apos;click&apos;, function () {
+		toggleTotalsVisibility(grid);
+	});
+	// toggleTotalsVisibility();
 });
 </code></pre>
 

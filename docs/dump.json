@@ -1,9 +1,9 @@
 [
   {
-    "__docId__": 0,
+    "__docId__": 863,
     "kind": "file",
     "name": "js/BudgetGrid.js",
-    "content": "/* eslint-disable require-jsdoc */\nlet grid;\nconst maxRecords = 300;\n\nfunction CustomPinnedRowRenderer() {}\n\nCustomPinnedRowRenderer.prototype.init = function (params) {\n\tthis.eGui = document.createElement('div');\n\tif (params.class) {\n\t\tthis.eGui.className += ' ' + params.class;\n\t}\n\tthis.eGui.innerHTML = params.value;\n};\n\nCustomPinnedRowRenderer.prototype.getGui = function () {\n\treturn this.eGui;\n};\n\nconst columnDefs = [\n\t{\n\t\theaderName: 'Producer group',\n\t\tfield: 'producerGroup',\n\t\thide: true,\n\t\trowGroup: true\n\t},\n\t{\n\t\theaderName: 'Producer',\n\t\tfield: 'producer',\n\t\thide: true,\n\t\trowGroup: true\n\t},\n\t{\n\t\theaderName: 'Dpt.',\n\t\tfield: 'department'\n\t},\n\t{\n\t\theaderName: 'SA',\n\t\tfield: 'sa'\n\t},\n\t{\n\t\theaderName: 'BL',\n\t\tfield: 'bl'\n\t},\n\t{\n\t\theaderName: 'Jan.',\n\t\tfield: 'january',\n\t\taggFunc: 'sum'\n\t},\n\t{\n\t\theaderName: 'Feb.',\n\t\tfield: 'february',\n\t\taggFunc: 'sum'\n\t},\n\t{\n\t\theaderName: 'Mar.',\n\t\tfield: 'march',\n\t\taggFunc: 'sum'\n\t},\n\t{\n\t\theaderName: 'Apr.',\n\t\tfield: 'april',\n\t\taggFunc: 'sum'\n\t},\n\t{\n\t\theaderName: 'May',\n\t\tfield: 'may',\n\t\taggFunc: 'sum'\n\t},\n\t{\n\t\theaderName: 'Jun.',\n\t\tfield: 'june',\n\t\taggFunc: 'sum'\n\t},\n\t{\n\t\theaderName: 'Jul.',\n\t\tfield: 'july',\n\t\taggFunc: 'sum'\n\t},\n\t{\n\t\theaderName: 'Aug.',\n\t\tfield: 'august',\n\t\taggFunc: 'sum'\n\t},\n\t{\n\t\theaderName: 'Sept.',\n\t\tfield: 'september',\n\t\taggFunc: 'sum'\n\t},\n\t{\n\t\theaderName: 'Oct.',\n\t\tfield: 'october',\n\t\taggFunc: 'sum'\n\t},\n\t{\n\t\theaderName: 'Nov.',\n\t\tfield: 'november',\n\t\taggFunc: 'sum'\n\t},\n\t{\n\t\theaderName: 'Dec.',\n\t\tfield: 'december',\n\t\taggFunc: 'sum'\n\t},\n\t{\n\t\theaderName: 'Total 2021',\n\t\tvalueGetter: params => {\n\t\t\tconsole.log(params);\n\t\t\treturn (\n\t\t\t\tparams.data.january +\n\t\t\t\tparams.data.february +\n\t\t\t\tparams.data.march +\n\t\t\t\tparams.data.april +\n\t\t\t\tparams.data.may +\n\t\t\t\tparams.data.june +\n\t\t\t\tparams.data.july +\n\t\t\t\tparams.data.august +\n\t\t\t\tparams.data.september +\n\t\t\t\tparams.data.october +\n\t\t\t\tparams.data.november +\n\t\t\t\tparams.data.december\n\t\t\t);\n\t\t},\n\t\tpinned: 'right',\n\t\taggFunc: 'sum',\n\t\tcellRendererSelector: function (params) {\n\t\t\tif (params.node.rowPinned) {\n\t\t\t\treturn {\n\t\t\t\t\tcomponent: CustomPinnedRowRenderer,\n\t\t\t\t\tparams: {\n\t\t\t\t\t\tclass: 'merda'\n\t\t\t\t\t}\n\t\t\t\t};\n\t\t\t} else {\n\t\t\t\treturn undefined;\n\t\t\t}\n\t\t}\n\t},\n\t{\n\t\theaderName: 'Budget 2021',\n\t\tfield: 'budget',\n\t\tpinned: 'right',\n\t\taggFunc: 'sum'\n\t},\n\t{\n\t\theaderName: 'Ecart 2021',\n\t\tvalueGetter: params => {\n\t\t\treturn (\n\t\t\t\tparams.data.january +\n\t\t\t\tparams.data.february +\n\t\t\t\tparams.data.march +\n\t\t\t\tparams.data.april +\n\t\t\t\tparams.data.may +\n\t\t\t\tparams.data.june +\n\t\t\t\tparams.data.july +\n\t\t\t\tparams.data.august +\n\t\t\t\tparams.data.september +\n\t\t\t\tparams.data.october +\n\t\t\t\tparams.data.november +\n\t\t\t\tparams.data.december -\n\t\t\t\tparams.data.budget\n\t\t\t);\n\t\t},\n\t\tvalueFormatter: params => {\n\t\t\tif (!isNaN(params.value)) {\n\t\t\t\treturn params.value > 0 ? '+' + params.value : params.value;\n\t\t\t} else {\n\t\t\t\treturn '';\n\t\t\t}\n\t\t},\n\t\tpinned: 'right',\n\t\taggFunc: 'sum'\n\t}\n];\n\nfunction randomIntFromInterval(min, max) {\n\treturn Math.floor(Math.random() * (max - min + 1) + min);\n}\n\nconst defaultColumnDef = {\n\tfilter: true,\n\tsortable: true,\n\tresizable: true,\n\tsuppressMenu: true\n};\n\nconst rowData = [];\n\nlet group = 1;\nlet prod = 1;\nlet groupIdent;\nlet prodIdent;\nlet jan;\nlet feb;\nlet mar;\nlet apr;\nlet may;\nlet jun;\nlet jul;\nlet aug;\nlet sept;\nlet oct;\nlet nov;\nlet dec;\nlet dep = randomIntFromInterval(15, 150);\nlet sa;\nlet bl;\nlet budget;\nfor (let i = 1; i < maxRecords + 1; i++) {\n\tgroupIdent = randomIntFromInterval(9, 18);\n\tprodIdent = randomIntFromInterval(3, 9);\n\tjan = randomIntFromInterval(15, 150);\n\tfeb = randomIntFromInterval(15, 150);\n\tmar = randomIntFromInterval(15, 150);\n\tapr = randomIntFromInterval(15, 150);\n\tmay = randomIntFromInterval(15, 150);\n\tjun = randomIntFromInterval(15, 150);\n\tjul = randomIntFromInterval(15, 150);\n\taug = randomIntFromInterval(15, 150);\n\tsept = randomIntFromInterval(15, 150);\n\toct = randomIntFromInterval(15, 150);\n\tnov = randomIntFromInterval(15, 150);\n\tdec = randomIntFromInterval(15, 150);\n\tbudget = randomIntFromInterval(15, 150) * 12;\n\tdep = i % prodIdent == 0 ? randomIntFromInterval(15, 150) : dep;\n\tsa = randomIntFromInterval(15, 150);\n\tbl = randomIntFromInterval(15, 150);\n\tgroup = i % groupIdent == 0 ? group + 1 : group;\n\tprod = i % prodIdent == 0 ? prod + 1 : prod;\n\trowData.push({\n\t\tproducerGroup: 'Group ' + group,\n\t\tproducer: 'producer ' + prod,\n\t\twasteFamily: 'waste family ' + i,\n\t\tjanuary: jan,\n\t\tfebruary: feb,\n\t\tmarch: mar,\n\t\tapril: apr,\n\t\tmay: may,\n\t\tjune: jun,\n\t\tjuly: jul,\n\t\taugust: aug,\n\t\tseptember: sept,\n\t\toctober: oct,\n\t\tnovember: nov,\n\t\tdecember: dec,\n\t\tbudget: budget,\n\t\tdepartment: 'DEP' + dep,\n\t\tsa: 'SA' + sa,\n\t\tbl: 'BL' + bl\n\t});\n}\n\nconst gridOptions = {\n\tcolumnDefs: columnDefs,\n\tdefaultColDef: defaultColumnDef,\n\trowData: rowData,\n\t// domLayout: 'autoHeight',\n\trowSelection: 'multiple',\n\theaderHeight: 46,\n\trowHeight: 64,\n\tsuppressRowClickSelection: true,\n\tonCellValueChanged: function (event) {\n\t\tconsole.log(event);\n\t},\n\tsideBar: {\n\t\ttoolPanels: [\n\t\t\t{\n\t\t\t\tid: 'filters',\n\t\t\t\tlabelDefault: 'Filters',\n\t\t\t\tlabelKey: 'filters',\n\t\t\t\ticonKey: 'filter',\n\t\t\t\ttoolPanel: 'agFiltersToolPanel'\n\t\t\t},\n\t\t\t{\n\t\t\t\tid: 'columns',\n\t\t\t\tlabelDefault: 'Columns',\n\t\t\t\tlabelKey: 'columns',\n\t\t\t\ticonKey: 'columns',\n\t\t\t\ttoolPanel: 'agColumnsToolPanel'\n\t\t\t}\n\t\t],\n\t\tdefaultToolPanel: undefined\n\t},\n\tautoGroupColumnDef: {\n\t\tfield: 'wasteFamily',\n\t\tcellRendererParams: {\n\t\t\tsuppressCount: true\n\t\t},\n\t\tpinned: 'left',\n\t\tminWidth: 300\n\t},\n\tenableRangeSelection: true,\n\tstatusBar: {\n\t\tstatusPanels: [\n\t\t\t{\n\t\t\t\tstatusPanel: 'agTotalAndFilteredRowCountComponent',\n\t\t\t\tkey: 'totalAndFilter',\n\t\t\t\talign: 'left'\n\t\t\t},\n\t\t\t{ statusPanel: 'agSelectedRowCountComponent', align: 'left' },\n\t\t\t{ statusPanel: 'agAggregationComponent', align: 'right' }\n\t\t]\n\t},\n\tpinnedTopRowData: [\n\t\t{\n\t\t\tproducerGroup: 'Nombre de jours ouvrés',\n\t\t\twasteFamily: 'Nombre de jours ouvrés',\n\t\t\tjanuary: 22,\n\t\t\tfebruary: 22,\n\t\t\tmarch: 21,\n\t\t\tapril: 21,\n\t\t\tmay: 22,\n\t\t\tjune: 22,\n\t\t\tjuly: 20,\n\t\t\taugust: 21,\n\t\t\tseptember: 21,\n\t\t\toctober: 21,\n\t\t\tnovember: 22,\n\t\t\tdecember: 22\n\t\t}\n\t]\n};\n\nfunction autoSizeAll(grid, skipHeader) {\n\tvar allColumnIds = [];\n\tgrid.gridOptions.columnApi.getAllColumns().forEach(function (column) {\n\t\tallColumnIds.push(column.colId);\n\t});\n\n\tgrid.gridOptions.columnApi.autoSizeColumns(allColumnIds, skipHeader);\n}\n\ndocument.addEventListener('DOMContentLoaded', () => {\n\tconst gridDiv = document.querySelector('#myGrid');\n\tgrid = new agGrid.Grid(gridDiv, gridOptions);\n\tautoSizeAll(grid, true);\n\t// gridOptions.api.sizeColumnsToFit();\n\twindow.grid = grid;\n});\n",
+    "content": "/* eslint-disable require-jsdoc */\nlet grid;\nconst maxRecords = 300;\n\nfunction CustomPinnedRowRenderer() {}\n\nCustomPinnedRowRenderer.prototype.init = function (params) {\n\tthis.eGui = document.createElement('div');\n\tif (params.class) {\n\t\tthis.eGui.className += ' ' + params.class;\n\t}\n\tthis.eGui.innerHTML = params.value;\n};\n\nCustomPinnedRowRenderer.prototype.getGui = function () {\n\treturn this.eGui;\n};\n\nconst columnDefs = [\n\t{\n\t\theaderName: 'Producer group',\n\t\tfield: 'producerGroup',\n\t\thide: true,\n\t\trowGroup: true\n\t},\n\t{\n\t\theaderName: 'Producer',\n\t\tfield: 'producer',\n\t\thide: true,\n\t\trowGroup: true\n\t},\n\t{\n\t\theaderName: 'Dpt.',\n\t\tfield: 'department'\n\t},\n\t{\n\t\theaderName: 'SA',\n\t\tfield: 'sa'\n\t},\n\t{\n\t\theaderName: 'BL',\n\t\tfield: 'bl'\n\t},\n\t{\n\t\theaderName: 'Jan.',\n\t\tfield: 'january',\n\t\taggFunc: 'sum'\n\t},\n\t{\n\t\theaderName: 'Feb.',\n\t\tfield: 'february',\n\t\taggFunc: 'sum'\n\t},\n\t{\n\t\theaderName: 'Mar.',\n\t\tfield: 'march',\n\t\taggFunc: 'sum'\n\t},\n\t{\n\t\theaderName: 'Apr.',\n\t\tfield: 'april',\n\t\taggFunc: 'sum'\n\t},\n\t{\n\t\theaderName: 'May',\n\t\tfield: 'may',\n\t\taggFunc: 'sum'\n\t},\n\t{\n\t\theaderName: 'Jun.',\n\t\tfield: 'june',\n\t\taggFunc: 'sum'\n\t},\n\t{\n\t\theaderName: 'Jul.',\n\t\tfield: 'july',\n\t\taggFunc: 'sum'\n\t},\n\t{\n\t\theaderName: 'Aug.',\n\t\tfield: 'august',\n\t\taggFunc: 'sum'\n\t},\n\t{\n\t\theaderName: 'Sept.',\n\t\tfield: 'september',\n\t\taggFunc: 'sum'\n\t},\n\t{\n\t\theaderName: 'Oct.',\n\t\tfield: 'october',\n\t\taggFunc: 'sum'\n\t},\n\t{\n\t\theaderName: 'Nov.',\n\t\tfield: 'november',\n\t\taggFunc: 'sum'\n\t},\n\t{\n\t\theaderName: 'Dec.',\n\t\tfield: 'december',\n\t\taggFunc: 'sum'\n\t},\n\t{\n\t\theaderName: 'Total 2021',\n\t\tvalueGetter: params => {\n\t\t\treturn (\n\t\t\t\tparams.data.january +\n\t\t\t\tparams.data.february +\n\t\t\t\tparams.data.march +\n\t\t\t\tparams.data.april +\n\t\t\t\tparams.data.may +\n\t\t\t\tparams.data.june +\n\t\t\t\tparams.data.july +\n\t\t\t\tparams.data.august +\n\t\t\t\tparams.data.september +\n\t\t\t\tparams.data.october +\n\t\t\t\tparams.data.november +\n\t\t\t\tparams.data.december\n\t\t\t);\n\t\t},\n\t\tpinned: 'right',\n\t\taggFunc: 'sum',\n\t\tcellRendererSelector: function (params) {\n\t\t\tif (params.node.rowPinned) {\n\t\t\t\treturn {\n\t\t\t\t\tcomponent: CustomPinnedRowRenderer,\n\t\t\t\t\tparams: {\n\t\t\t\t\t\tclass: 'merda'\n\t\t\t\t\t}\n\t\t\t\t};\n\t\t\t} else {\n\t\t\t\treturn undefined;\n\t\t\t}\n\t\t}\n\t},\n\t{\n\t\theaderName: 'Budget 2021',\n\t\tfield: 'budget',\n\t\tpinned: 'right',\n\t\taggFunc: 'sum'\n\t},\n\t{\n\t\theaderName: 'Ecart 2021',\n\t\tvalueGetter: params => {\n\t\t\treturn (\n\t\t\t\tparams.data.january +\n\t\t\t\tparams.data.february +\n\t\t\t\tparams.data.march +\n\t\t\t\tparams.data.april +\n\t\t\t\tparams.data.may +\n\t\t\t\tparams.data.june +\n\t\t\t\tparams.data.july +\n\t\t\t\tparams.data.august +\n\t\t\t\tparams.data.september +\n\t\t\t\tparams.data.october +\n\t\t\t\tparams.data.november +\n\t\t\t\tparams.data.december -\n\t\t\t\tparams.data.budget\n\t\t\t);\n\t\t},\n\t\tvalueFormatter: params => {\n\t\t\tif (!isNaN(params.value)) {\n\t\t\t\treturn params.value > 0 ? '+' + params.value : params.value;\n\t\t\t} else {\n\t\t\t\treturn '';\n\t\t\t}\n\t\t},\n\t\tpinned: 'right',\n\t\taggFunc: 'sum'\n\t}\n];\n\nfunction randomIntFromInterval(min, max) {\n\treturn Math.floor(Math.random() * (max - min + 1) + min);\n}\n\nconst defaultColumnDef = {\n\tfilter: true,\n\tsortable: true,\n\tresizable: true,\n\tsuppressMenu: true\n};\n\nconst rowData = [];\n\nlet group = 1;\nlet prod = 1;\nlet groupIdent;\nlet prodIdent;\nlet jan;\nlet feb;\nlet mar;\nlet apr;\nlet may;\nlet jun;\nlet jul;\nlet aug;\nlet sept;\nlet oct;\nlet nov;\nlet dec;\nlet dep = randomIntFromInterval(15, 150);\nlet sa;\nlet bl;\nlet budget;\nfor (let i = 1; i < maxRecords + 1; i++) {\n\tgroupIdent = randomIntFromInterval(9, 18);\n\tprodIdent = randomIntFromInterval(3, 9);\n\tjan = randomIntFromInterval(15, 150);\n\tfeb = randomIntFromInterval(15, 150);\n\tmar = randomIntFromInterval(15, 150);\n\tapr = randomIntFromInterval(15, 150);\n\tmay = randomIntFromInterval(15, 150);\n\tjun = randomIntFromInterval(15, 150);\n\tjul = randomIntFromInterval(15, 150);\n\taug = randomIntFromInterval(15, 150);\n\tsept = randomIntFromInterval(15, 150);\n\toct = randomIntFromInterval(15, 150);\n\tnov = randomIntFromInterval(15, 150);\n\tdec = randomIntFromInterval(15, 150);\n\tbudget = randomIntFromInterval(15, 150) * 12;\n\tdep = i % prodIdent == 0 ? randomIntFromInterval(15, 150) : dep;\n\tsa = randomIntFromInterval(15, 150);\n\tbl = randomIntFromInterval(15, 150);\n\tgroup = i % groupIdent == 0 ? group + 1 : group;\n\tprod = i % prodIdent == 0 ? prod + 1 : prod;\n\trowData.push({\n\t\tproducerGroup: 'Group ' + group,\n\t\tproducer: 'producer ' + prod,\n\t\twasteFamily: 'waste family ' + i,\n\t\tjanuary: jan,\n\t\tfebruary: feb,\n\t\tmarch: mar,\n\t\tapril: apr,\n\t\tmay: may,\n\t\tjune: jun,\n\t\tjuly: jul,\n\t\taugust: aug,\n\t\tseptember: sept,\n\t\toctober: oct,\n\t\tnovember: nov,\n\t\tdecember: dec,\n\t\tbudget: budget,\n\t\tdepartment: 'DEP' + dep,\n\t\tsa: 'SA' + sa,\n\t\tbl: 'BL' + bl\n\t});\n}\n\nconst gridOptions = {\n\tcolumnDefs: columnDefs,\n\tdefaultColDef: defaultColumnDef,\n\trowData: rowData,\n\t// domLayout: 'autoHeight',\n\trowSelection: 'multiple',\n\theaderHeight: 46,\n\trowHeight: 64,\n\tsuppressRowClickSelection: true,\n\tonCellValueChanged: function (event) {\n\t\tconsole.log(event);\n\t},\n\tsideBar: {\n\t\ttoolPanels: [\n\t\t\t{\n\t\t\t\tid: 'filters',\n\t\t\t\tlabelDefault: 'Filters',\n\t\t\t\tlabelKey: 'filters',\n\t\t\t\ticonKey: 'filter',\n\t\t\t\ttoolPanel: 'agFiltersToolPanel'\n\t\t\t},\n\t\t\t{\n\t\t\t\tid: 'columns',\n\t\t\t\tlabelDefault: 'Columns',\n\t\t\t\tlabelKey: 'columns',\n\t\t\t\ticonKey: 'columns',\n\t\t\t\ttoolPanel: 'agColumnsToolPanel'\n\t\t\t}\n\t\t],\n\t\tdefaultToolPanel: undefined\n\t},\n\tautoGroupColumnDef: {\n\t\tfield: 'wasteFamily',\n\t\tcellRendererParams: {\n\t\t\tsuppressCount: true\n\t\t},\n\t\tpinned: 'left',\n\t\tminWidth: 300\n\t},\n\tenableRangeSelection: true,\n\tstatusBar: {\n\t\tstatusPanels: [\n\t\t\t{\n\t\t\t\tstatusPanel: 'agTotalAndFilteredRowCountComponent',\n\t\t\t\tkey: 'totalAndFilter',\n\t\t\t\talign: 'left'\n\t\t\t},\n\t\t\t{ statusPanel: 'agSelectedRowCountComponent', align: 'left' },\n\t\t\t{ statusPanel: 'agAggregationComponent', align: 'right' }\n\t\t]\n\t},\n\tpinnedTopRowData: [\n\t\t{\n\t\t\tproducerGroup: 'Nombre de jours ouvrés',\n\t\t\twasteFamily: 'Nombre de jours ouvrés',\n\t\t\tjanuary: 22,\n\t\t\tfebruary: 22,\n\t\t\tmarch: 21,\n\t\t\tapril: 21,\n\t\t\tmay: 22,\n\t\t\tjune: 22,\n\t\t\tjuly: 20,\n\t\t\taugust: 21,\n\t\t\tseptember: 21,\n\t\t\toctober: 21,\n\t\t\tnovember: 22,\n\t\t\tdecember: 22\n\t\t}\n\t]\n};\n\nfunction autoSizeAll(grid, skipHeader) {\n\tvar allColumnIds = [];\n\tgrid.gridOptions.columnApi.getAllColumns().forEach(function (column) {\n\t\tallColumnIds.push(column.colId);\n\t});\n\n\tgrid.gridOptions.columnApi.autoSizeColumns(allColumnIds, skipHeader);\n}\n\nfunction toggleTotalsVisibility(grid) {\n\tlet isToHide = true;\n\tconst currentState = grid.gridOptions.columnApi.getColumnState();\n\tconst nextState = currentState.map((column, index) => {\n\t\tif (index > 17) {\n\t\t\tcolumn.hide = !column.hide;\n\t\t\tisToHide = column.hide;\n\t\t}\n\t\treturn column;\n\t});\n\tconsole.log(currentState);\n\tgrid.gridOptions.columnApi.applyColumnState({\n\t\tstate: nextState\n\t});\n\tif (isToHide) {\n\t\tgrid.gridOptions.api.sizeColumnsToFit();\n\t} else {\n\t\tautoSizeAll(grid, true);\n\t}\n}\n\ndocument.addEventListener('DOMContentLoaded', () => {\n\tconst gridDiv = document.querySelector('#myGrid');\n\tgrid = new agGrid.Grid(gridDiv, gridOptions);\n\tautoSizeAll(grid, true);\n\t// gridOptions.api.sizeColumnsToFit();\n\twindow.grid = grid;\n\tdocument.getElementById('btn').addEventListener('click', function () {\n\t\ttoggleTotalsVisibility(grid);\n\t});\n\t// toggleTotalsVisibility();\n});\n",
     "static": true,
     "longname": "js/BudgetGrid.js",
     "access": null,
@@ -11,7 +11,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 1,
+    "__docId__": 864,
     "kind": "variable",
     "name": "maxRecords",
     "memberof": "js/BudgetGrid.js",
@@ -37,7 +37,7 @@
     }
   },
   {
-    "__docId__": 2,
+    "__docId__": 865,
     "kind": "function",
     "name": "CustomPinnedRowRenderer",
     "memberof": "js/BudgetGrid.js",
@@ -61,7 +61,7 @@
     "params": []
   },
   {
-    "__docId__": 3,
+    "__docId__": 866,
     "kind": "function",
     "name": "init",
     "memberof": "js/BudgetGrid.js",
@@ -92,7 +92,7 @@
     ]
   },
   {
-    "__docId__": 4,
+    "__docId__": 867,
     "kind": "function",
     "name": "getGui",
     "memberof": "js/BudgetGrid.js",
@@ -121,7 +121,7 @@
     }
   },
   {
-    "__docId__": 5,
+    "__docId__": 868,
     "kind": "variable",
     "name": "columnDefs",
     "memberof": "js/BudgetGrid.js",
@@ -147,7 +147,7 @@
     }
   },
   {
-    "__docId__": 6,
+    "__docId__": 869,
     "kind": "function",
     "name": "randomIntFromInterval",
     "memberof": "js/BudgetGrid.js",
@@ -160,7 +160,7 @@
     "importPath": "ag-grid-tests/js/BudgetGrid.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 175,
+    "lineNumber": 174,
     "undocument": true,
     "unknown": [
       {
@@ -189,7 +189,7 @@
     }
   },
   {
-    "__docId__": 7,
+    "__docId__": 870,
     "kind": "variable",
     "name": "defaultColumnDef",
     "memberof": "js/BudgetGrid.js",
@@ -200,7 +200,7 @@
     "importPath": "ag-grid-tests/js/BudgetGrid.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 179,
+    "lineNumber": 178,
     "undocument": true,
     "unknown": [
       {
@@ -215,7 +215,7 @@
     }
   },
   {
-    "__docId__": 8,
+    "__docId__": 871,
     "kind": "variable",
     "name": "rowData",
     "memberof": "js/BudgetGrid.js",
@@ -226,7 +226,7 @@
     "importPath": "ag-grid-tests/js/BudgetGrid.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 186,
+    "lineNumber": 185,
     "undocument": true,
     "unknown": [
       {
@@ -241,12 +241,38 @@
     }
   },
   {
-    "__docId__": 9,
+    "__docId__": 872,
     "kind": "variable",
     "name": "group",
     "memberof": "js/BudgetGrid.js",
     "static": true,
     "longname": "js/BudgetGrid.js~group",
+    "access": null,
+    "export": false,
+    "importPath": "ag-grid-tests/js/BudgetGrid.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 187,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "number"
+      ]
+    }
+  },
+  {
+    "__docId__": 873,
+    "kind": "variable",
+    "name": "prod",
+    "memberof": "js/BudgetGrid.js",
+    "static": true,
+    "longname": "js/BudgetGrid.js~prod",
     "access": null,
     "export": false,
     "importPath": "ag-grid-tests/js/BudgetGrid.js",
@@ -267,33 +293,7 @@
     }
   },
   {
-    "__docId__": 10,
-    "kind": "variable",
-    "name": "prod",
-    "memberof": "js/BudgetGrid.js",
-    "static": true,
-    "longname": "js/BudgetGrid.js~prod",
-    "access": null,
-    "export": false,
-    "importPath": "ag-grid-tests/js/BudgetGrid.js",
-    "importStyle": null,
-    "description": null,
-    "lineNumber": 189,
-    "undocument": true,
-    "unknown": [
-      {
-        "tagName": "@_undocument",
-        "tagValue": ""
-      }
-    ],
-    "type": {
-      "types": [
-        "number"
-      ]
-    }
-  },
-  {
-    "__docId__": 11,
+    "__docId__": 874,
     "kind": "variable",
     "name": "dep",
     "memberof": "js/BudgetGrid.js",
@@ -304,7 +304,7 @@
     "importPath": "ag-grid-tests/js/BudgetGrid.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 204,
+    "lineNumber": 203,
     "undocument": true,
     "unknown": [
       {
@@ -319,7 +319,7 @@
     }
   },
   {
-    "__docId__": 12,
+    "__docId__": 875,
     "kind": "variable",
     "name": "gridOptions",
     "memberof": "js/BudgetGrid.js",
@@ -330,7 +330,7 @@
     "importPath": "ag-grid-tests/js/BudgetGrid.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 252,
+    "lineNumber": 251,
     "undocument": true,
     "unknown": [
       {
@@ -345,7 +345,7 @@
     }
   },
   {
-    "__docId__": 13,
+    "__docId__": 876,
     "kind": "function",
     "name": "autoSizeAll",
     "memberof": "js/BudgetGrid.js",
@@ -358,7 +358,7 @@
     "importPath": "ag-grid-tests/js/BudgetGrid.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 323,
+    "lineNumber": 322,
     "undocument": true,
     "unknown": [
       {
@@ -382,7 +382,38 @@
     ]
   },
   {
-    "__docId__": 15,
+    "__docId__": 877,
+    "kind": "function",
+    "name": "toggleTotalsVisibility",
+    "memberof": "js/BudgetGrid.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "js/BudgetGrid.js~toggleTotalsVisibility",
+    "access": null,
+    "export": false,
+    "importPath": "ag-grid-tests/js/BudgetGrid.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 331,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "params": [
+      {
+        "name": "grid",
+        "types": [
+          "*"
+        ]
+      }
+    ]
+  },
+  {
+    "__docId__": 879,
     "kind": "external",
     "name": "Infinity",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Infinity",
@@ -394,7 +425,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 16,
+    "__docId__": 880,
     "kind": "external",
     "name": "NaN",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NaN",
@@ -406,7 +437,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 17,
+    "__docId__": 881,
     "kind": "external",
     "name": "undefined",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined",
@@ -418,7 +449,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 18,
+    "__docId__": 882,
     "kind": "external",
     "name": "null",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null",
@@ -430,7 +461,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 19,
+    "__docId__": 883,
     "kind": "external",
     "name": "Object",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
@@ -442,7 +473,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 20,
+    "__docId__": 884,
     "kind": "external",
     "name": "object",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
@@ -454,7 +485,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 21,
+    "__docId__": 885,
     "kind": "external",
     "name": "Function",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
@@ -466,7 +497,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 22,
+    "__docId__": 886,
     "kind": "external",
     "name": "function",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
@@ -478,7 +509,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 23,
+    "__docId__": 887,
     "kind": "external",
     "name": "Boolean",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
@@ -490,7 +521,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 24,
+    "__docId__": 888,
     "kind": "external",
     "name": "boolean",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
@@ -502,7 +533,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 25,
+    "__docId__": 889,
     "kind": "external",
     "name": "Symbol",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol",
@@ -514,7 +545,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 26,
+    "__docId__": 890,
     "kind": "external",
     "name": "Error",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error",
@@ -526,7 +557,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 27,
+    "__docId__": 891,
     "kind": "external",
     "name": "EvalError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/EvalError",
@@ -538,7 +569,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 28,
+    "__docId__": 892,
     "kind": "external",
     "name": "InternalError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/InternalError",
@@ -550,7 +581,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 29,
+    "__docId__": 893,
     "kind": "external",
     "name": "RangeError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RangeError",
@@ -562,7 +593,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 30,
+    "__docId__": 894,
     "kind": "external",
     "name": "ReferenceError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError",
@@ -574,7 +605,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 31,
+    "__docId__": 895,
     "kind": "external",
     "name": "SyntaxError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SyntaxError",
@@ -586,7 +617,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 32,
+    "__docId__": 896,
     "kind": "external",
     "name": "TypeError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypeError",
@@ -598,7 +629,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 33,
+    "__docId__": 897,
     "kind": "external",
     "name": "URIError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/URIError",
@@ -610,7 +641,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 34,
+    "__docId__": 898,
     "kind": "external",
     "name": "Number",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
@@ -622,7 +653,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 35,
+    "__docId__": 899,
     "kind": "external",
     "name": "number",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
@@ -634,7 +665,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 36,
+    "__docId__": 900,
     "kind": "external",
     "name": "Date",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date",
@@ -646,7 +677,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 37,
+    "__docId__": 901,
     "kind": "external",
     "name": "String",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
@@ -658,7 +689,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 38,
+    "__docId__": 902,
     "kind": "external",
     "name": "string",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
@@ -670,7 +701,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 39,
+    "__docId__": 903,
     "kind": "external",
     "name": "RegExp",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp",
@@ -682,7 +713,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 40,
+    "__docId__": 904,
     "kind": "external",
     "name": "Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
@@ -694,7 +725,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 41,
+    "__docId__": 905,
     "kind": "external",
     "name": "Int8Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int8Array",
@@ -706,7 +737,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 42,
+    "__docId__": 906,
     "kind": "external",
     "name": "Uint8Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array",
@@ -718,7 +749,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 43,
+    "__docId__": 907,
     "kind": "external",
     "name": "Uint8ClampedArray",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray",
@@ -730,7 +761,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 44,
+    "__docId__": 908,
     "kind": "external",
     "name": "Int16Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int16Array",
@@ -742,7 +773,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 45,
+    "__docId__": 909,
     "kind": "external",
     "name": "Uint16Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array",
@@ -754,7 +785,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 46,
+    "__docId__": 910,
     "kind": "external",
     "name": "Int32Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int32Array",
@@ -766,7 +797,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 47,
+    "__docId__": 911,
     "kind": "external",
     "name": "Uint32Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint32Array",
@@ -778,7 +809,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 48,
+    "__docId__": 912,
     "kind": "external",
     "name": "Float32Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array",
@@ -790,7 +821,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 49,
+    "__docId__": 913,
     "kind": "external",
     "name": "Float64Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float64Array",
@@ -802,7 +833,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 50,
+    "__docId__": 914,
     "kind": "external",
     "name": "Map",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map",
@@ -814,7 +845,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 51,
+    "__docId__": 915,
     "kind": "external",
     "name": "Set",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set",
@@ -826,7 +857,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 52,
+    "__docId__": 916,
     "kind": "external",
     "name": "WeakMap",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap",
@@ -838,7 +869,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 53,
+    "__docId__": 917,
     "kind": "external",
     "name": "WeakSet",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakSet",
@@ -850,7 +881,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 54,
+    "__docId__": 918,
     "kind": "external",
     "name": "ArrayBuffer",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer",
@@ -862,7 +893,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 55,
+    "__docId__": 919,
     "kind": "external",
     "name": "DataView",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView",
@@ -874,7 +905,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 56,
+    "__docId__": 920,
     "kind": "external",
     "name": "JSON",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON",
@@ -886,7 +917,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 57,
+    "__docId__": 921,
     "kind": "external",
     "name": "Promise",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise",
@@ -898,7 +929,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 58,
+    "__docId__": 922,
     "kind": "external",
     "name": "Generator",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator",
@@ -910,7 +941,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 59,
+    "__docId__": 923,
     "kind": "external",
     "name": "GeneratorFunction",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction",
@@ -922,7 +953,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 60,
+    "__docId__": 924,
     "kind": "external",
     "name": "Reflect",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect",
@@ -934,7 +965,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 61,
+    "__docId__": 925,
     "kind": "external",
     "name": "Proxy",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy",
@@ -947,7 +978,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 63,
+    "__docId__": 927,
     "kind": "external",
     "name": "CanvasRenderingContext2D",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D",
@@ -959,7 +990,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 64,
+    "__docId__": 928,
     "kind": "external",
     "name": "DocumentFragment",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment",
@@ -971,7 +1002,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 65,
+    "__docId__": 929,
     "kind": "external",
     "name": "Element",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Element",
@@ -983,7 +1014,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 66,
+    "__docId__": 930,
     "kind": "external",
     "name": "Event",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Event",
@@ -995,7 +1026,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 67,
+    "__docId__": 931,
     "kind": "external",
     "name": "Node",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Node",
@@ -1007,7 +1038,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 68,
+    "__docId__": 932,
     "kind": "external",
     "name": "NodeList",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/NodeList",
@@ -1019,7 +1050,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 69,
+    "__docId__": 933,
     "kind": "external",
     "name": "XMLHttpRequest",
     "externalLink": "https://developer.mozilla.org/en/docs/Web/API/XMLHttpRequest",
@@ -1031,7 +1062,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 70,
+    "__docId__": 934,
     "kind": "external",
     "name": "AudioContext",
     "externalLink": "https://developer.mozilla.org/en/docs/Web/API/AudioContext",

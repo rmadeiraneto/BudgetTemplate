@@ -41,19 +41,18 @@
 			headerName: 'Total 2021',
 			valueGetter: function valueGetter(params) {
 				return (
-					console.log(params),
 					params.data.january +
-						params.data.february +
-						params.data.march +
-						params.data.april +
-						params.data.may +
-						params.data.june +
-						params.data.july +
-						params.data.august +
-						params.data.september +
-						params.data.october +
-						params.data.november +
-						params.data.december
+					params.data.february +
+					params.data.march +
+					params.data.april +
+					params.data.may +
+					params.data.june +
+					params.data.july +
+					params.data.august +
+					params.data.september +
+					params.data.october +
+					params.data.november +
+					params.data.december
 				);
 			},
 			pinned: 'right',
@@ -250,11 +249,30 @@
 		}),
 			grid.gridOptions.columnApi.autoSizeColumns(allColumnIds, skipHeader);
 	}
+	function toggleTotalsVisibility(grid) {
+		var isToHide = !0,
+			currentState = grid.gridOptions.columnApi.getColumnState(),
+			nextState = currentState.map(function (column, index) {
+				return (
+					17 < index &&
+						((column.hide = !column.hide), (isToHide = column.hide)),
+					column
+				);
+			});
+		console.log(currentState),
+			grid.gridOptions.columnApi.applyColumnState({ state: nextState }),
+			isToHide
+				? grid.gridOptions.api.sizeColumnsToFit()
+				: autoSizeAll(grid, !0);
+	}
 	document.addEventListener('DOMContentLoaded', function () {
 		var gridDiv = document.querySelector('#myGrid'); // gridOptions.api.sizeColumnsToFit();
 		(grid = new agGrid.Grid(gridDiv, gridOptions)),
 			autoSizeAll(grid, !0),
-			(window.grid = grid);
+			(window.grid = grid),
+			document.getElementById('btn').addEventListener('click', function () {
+				toggleTotalsVisibility(grid);
+			});
 	});
 });
 //# sourceMappingURL=BudgetGrid.js.map
